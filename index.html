@@ -1,0 +1,91 @@
+<!DOCTYPE HTML>
+<html>
+ <head>
+   <meta charset="utf-8">
+   <title>CloudPayments testwork</title>
+   <link rel="stylesheet" href="main.css" type="text/css">
+   <script src="https://widget.cloudpayments.ru/bundles/cloudpayments"></script>
+   <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+ </head>
+ <body>
+   <main>
+     <div class="donation">
+       <h1>ООО &#171;Благотворительный фонд&#187;</h1>
+       <fieldset class="donation__modal">
+         <label class="donation__label">
+           Фамилия
+           <input type="text" id="lastName" class="donation__lastname" required>
+         </label>
+         <label class="donation__label">
+           Имя
+           <input type="text" id="name" class="donation__name" required>
+         </label>
+         <label class="donation__label">
+           Телефон
+           <input type="number" id="phone">
+         </label>
+         <label class="donation__label">
+           Почта
+           <input type="email" id="email">
+         </label>
+         <label class="donation__label">
+           Сумма пожертвования
+           <input type="number" id="amount" required>
+         </label>
+         <button id="checkout" class="btn">
+           Пожертвовать
+         </button>
+       </fieldset>
+       <script type="text/javascript">
+           //note: в примере используется библиотека jquery
+
+this.pay = function () {
+    var widget = new cp.CloudPayments(); 
+	
+    var widgetMail = "koblents1945@gmail.com";
+    
+    var receipt = {
+			"Items": [//товарные позициии
+				{
+					"label": "Наименование товара 1", //наименование товара
+					"price": 100.00, //цена
+					"quantity": 1.00, //количество
+					"amount": 100.00, //сумма
+					"vat": 18, //ставка НДС
+                    			"method": 0, // тег-1214 признак способа расчета - признак способа расчета
+    			    		"object": 0, // тег-1212 признак предмета расчета - признак предмета товара, работы, услуги, платежа, выплаты, иного предмета расчета
+                    			"measurementUnit": "шт" //единица измерения
+				}
+			],
+	    		"taxationSystem": 0, //система налогообложения; необязательный, если у вас одна система налогообложения
+	  		"email": ""
+		}
+    
+   	var data = {};
+	
+	data.cloudPayments = {"customerReceipt": receipt};
+
+
+    widget.charge({ // options
+        publicId: 'pk_e5450f37312698f63920b12f4be44', //id из личного кабинета
+        description: 'Пожертвование', //назначение
+        amount: 100, //сумма
+        currency: 'RUB', //валюта
+	email: widgetMail,
+        data: data
+    },
+    function (options) { // success
+        //действие при успешной оплате
+    },
+    function (reason, options) { // fail
+        //действие при неуспешной оплате
+    });
+};
+
+$('#checkout').click(pay);
+
+       </script>
+   </div>
+   </main>
+ </body>
+</html>
